@@ -1,0 +1,26 @@
+spring:
+  application:
+    name: configserver
+
+  profiles:
+    active: native
+  cloud:
+    config:
+      server:
+        native:
+          search-locations: file:///Users/dishabajaj/Udemy/2_SpringBoot_FullStack_Master_MicroServices/ecom-microservices/configserver/src/main/resources/config
+  rabbitmq:
+      host: localhost   #This is the hostname of the RabbitMQ server. If RabbitMQ is running on the same machine as the Spring Boot application, you can use "localhost". If it's running on a different machine, replace "localhost" with the appropriate hostname or IP address.
+      port: 5672
+      username: guest
+      password: guest
+
+  management:
+    endpoints:
+      web:
+        exposure:
+          include: "*"
+
+
+server:
+  port: 8888
