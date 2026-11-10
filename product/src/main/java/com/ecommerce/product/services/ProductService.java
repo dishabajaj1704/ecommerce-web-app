@@ -44,10 +44,10 @@ public class ProductService {
 
     }
 
-    public Optional<ProductResponse> getProductById(Long id) {
+    public Optional<ProductResponse> getProductById(String id) {
        return productRepository.findByActiveTrue()
                .stream()
-               .filter(product -> product.getId().equals(id))
+               .filter(product -> product.getId().equals(Long.parseLong(id)))
                .findFirst()
                .map(this::mapToProductResponse);
     }
@@ -87,5 +87,10 @@ public class ProductService {
         productResponse.setCategory(product.getCategory());
         productResponse.setStockQuantity(product.getStockQuantity());
         return productResponse;
+    }
+
+    public boolean isProductAvailable(String productId) {
+        Optional<Product> productOptional = productRepository.findById(Long.parseLong(productId));
+        return productOptional.map(product -> product.getStockQuantity() > 0 && product.isActive()).orElse(false);
     }
 }

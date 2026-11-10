@@ -2,6 +2,8 @@ package com.example.order.services;
 
 
 
+import com.example.order.clients.ProductServiceClient;
+import com.example.order.dtos.ProductResponse;
 import com.example.order.models.CartItem;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -16,20 +18,17 @@ import java.util.Optional;
 @Transactional  // Ensures that all public methods are wrapped in a transaction. If any method throws an exception, the transaction will be rolled back. Why we need it here? Because we are performing multiple database operations that need to be atomic.
 public class CartService {
 
-//    private final ProductRepository productRepository;
     private final com.example.order.repository.CartItemRepository cartItemRepository;
-//    private final UserRepository userRepository;
+    private final ProductServiceClient productServiceClient;
 
     public boolean addToCart(String userId, com.example.order.dtos.CartItemRequest cartItemRequest) {
         // Look for Product
-//        Optional<Product> productOptional = productRepository.findById(cartItemRequest.getProductId());
-//        if (productOptional.isEmpty()) { return false;     }
-//
-//        Product product = productOptional.get();
-//        if(product.getStockQuantity() < cartItemRequest.getQuantity()){
-//            return false; // Not enough stock
-//        }
-//
+
+       ProductResponse productResponse = productServiceClient.getProductDetails(cartItemRequest.getProductId());
+        if(productResponse == null || productResponse.getStockQuantity() < cartItemRequest.getQuantity()){
+            return false;
+        }
+
 //        Optional<User> userOptional = userRepository.findById(Long.valueOf(userId));
 
 //        if(userOptional.isEmpty()) { return false; }
